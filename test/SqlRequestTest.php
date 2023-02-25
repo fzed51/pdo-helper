@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class SqlRequestTest extends TestCase
 {
-
     /**
      * test des select
      */
