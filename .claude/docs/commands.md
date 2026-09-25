@@ -1,6 +1,6 @@
 # Commandes
 
-## Tests (phpunit 9)
+## Tests (PHPUnit 11)
 
 ```bash
 composer test                                   # toute la suite (timeout Composer désactivé)
@@ -8,7 +8,7 @@ vendor/bin/phpunit test/PdoQueryableTest.php    # un fichier
 vendor/bin/phpunit --filter testFetchAll        # un test
 ```
 
-Config `phpunit.xml` : bootstrap `vendor/autoload.php`, suite = `test/*Test.php`, mode strict (sortie pendant un test = test « risky »).
+Config `phpunit.xml` : bootstrap `vendor/autoload.php`, suite = `test/*Test.php`, échec sur tout warning, deprecation ou test risky (ex. sortie pendant un test). PHPUnit 12 exige PHP 8.3 : rester en 11 tant que 8.2 est supporté.
 
 ## Qualité
 
