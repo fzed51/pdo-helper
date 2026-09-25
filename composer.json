@@ -4,7 +4,8 @@
   "type": "library",
   "require": {
     "php": ">=8.2 <8.6",
-    "ext-PDO": "*"
+    "ext-PDO": "*",
+    "ext-mbstring": "*"
   },
   "license": "MIT",
   "authors": [
