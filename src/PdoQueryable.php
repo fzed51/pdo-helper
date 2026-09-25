@@ -85,6 +85,7 @@ trait PdoQueryable
     protected function execute(array $params = []): PDOStatement
     {
         $stm = $this->prepare();
+        $this->lastReqSql = $this->reqSql;
         $this->lastRowsAffected = 0;
         try {
             if (empty($params)) {

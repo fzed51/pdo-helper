@@ -1,6 +1,13 @@
 # PDO-HELPER
 
-Librairie PHP 8.1+ d'aide à l'utilisation de PDO et au requêtage des bases de données.
+Librairie PHP d'aide à l'utilisation de PDO et au requêtage des bases de données.
+
+> Vous migrez depuis la v2 ? Consultez le [CHANGELOG](CHANGELOG.md) : la v3 contient des changements incompatibles.
+
+## Prérequis
+
+- PHP **8.2 à 8.5**
+- extensions `pdo` (et le driver de votre SGBD : `pdo_mysql`, `pdo_pgsql`, `pdo_sqlite`, `pdo_oci`) et `mbstring`
 
 ## Installation
 
@@ -64,7 +71,7 @@ $users = $db->select(['id', 'nom', 'email'], 'users', ['actif' => 1]);
 // Avec alias : ['alias' => 'champ']
 $users = $db->select(['identifiant' => 'id', 'nom'], 'users');
 
-// Limite
+// Limite (appliquée côté PHP après la requête, pas en SQL)
 $users = $db->select(['id', 'nom'], 'users', [], 10);
 
 // Un seul enregistrement (retourne null si absent)
@@ -86,7 +93,7 @@ $db->update('users', ['email' => 'nouveau@example.com'], ['id' => 42]);
 // Suppression
 $db->delete('users', ['id' => 42]);
 
-// Dernier PK (MAX sur la colonne)
+// Dernier PK (MAX sur la colonne ; UnderflowException si la table est vide)
 $lastId = $db->getLastPk('users', 'id');
 ```
 
@@ -98,7 +105,9 @@ $lastId = $db->getLastPk('users', 'id');
 | `['champ' => null]` | `champ IS NULL` |
 | `['age > 18']` (clé entière) | clause brute verbatim |
 
-Sans clause WHERE, la condition `1 = 1` est utilisée.
+Sans clause WHERE, la condition `1 = 1` est utilisée. Une clause sans clé doit être une chaine, sinon une `InvalidArgumentException` est levée.
+
+> ⚠️ **Sécurité** : seules les **valeurs** sont passées en paramètres liés. Les noms de tables et de colonnes, ainsi que les clauses brutes (clé entière), sont insérés tels quels dans le SQL : n'y placez jamais de données provenant d'un utilisateur.
 
 ---
 
@@ -143,5 +152,5 @@ class UserRepository
 
 - Les `PDOStatement` sont mis en cache par hash SHA-256 du SQL (évite les `prepare()` répétés).
 - L'encodage des paramètres en entrée et des données en sortie est converti automatiquement. Les charsets supportés sont : `UTF-8`, `CP1252`, `ISO-8859-15`, `ISO-8859-1`, `ASCII`. La sortie est toujours ramenée en `UTF-8` ; l'encodage cible en entrée se configure via `setCharset()`.
-- `getLastReqInfo()` retourne `['request' => string, 'params' => array]` pour le débogage.
+- Les méthodes du trait sont `protected` (à utiliser dans votre classe), sauf `getLastReqInfo()` qui est publique et retourne `['request' => string, 'params' => array]` (ou `null`) pour le débogage.
 - `getRowsAffected()` retourne le nombre de lignes affectées par le dernier `execute()`.
