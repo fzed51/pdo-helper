@@ -4,9 +4,9 @@ Trois briques indépendantes dans `src/` (namespace `Helper\`), aucune ne dépen
 
 ## PDOFactory
 
-Constructeurs statiques de `PDO` : `mysql()`, `sqlite()` (défaut `:memory:`, lève `InvalidArgumentException` si le fichier n'existe pas), `oci()`, `pgsql()`. Tous passent par `configPdo()` : `ERRMODE_EXCEPTION`, fetch mode et case.
+Constructeurs statiques de `PDO` : `mysql()`, `sqlite()` (défaut `:memory:`, lève `InvalidArgumentException` si le fichier n'existe pas), `oci()`, `pgsql()`. Tous passent par `configPdo()`.
 
-- Case et fetch mode viennent des **statiques globales** `PDOFactory::$case` (défaut `CASE_UPPER`) et `$fetchMode` (défaut `FETCH_OBJ`). Elles s'appliquent à toutes les connexions créées ensuite et persistent entre tests.
+- Défauts dans la constante `DEFAULT_ATTRIBUTES` : `ERRMODE_EXCEPTION`, `FETCH_ASSOC`, `CASE_LOWER` (clés identiques sur tous les SGBD, ce qu'attend `DbQuickUse`). Chaque constructeur prend en dernier argument `array $attributes`, fusionné par-dessus avec `+` (pas `array_merge`, qui renumérote les clés int).
 - `oci()` force `NLS_DATE_FORMAT` / `NLS_TIMESTAMP_FORMAT` et lève `RuntimeException` si impossible.
 
 ## DbQuickUse
