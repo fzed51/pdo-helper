@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Helper;
@@ -225,7 +226,7 @@ trait PdoQueryable
 
     /**
      * Retourne le nombre de lignes affecté par la dernière exécution.
-     * @return int;
+     * @return int
      */
     protected function getRowsAffected(): int
     {

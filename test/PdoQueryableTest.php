@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection SqlResolve */
 
 /** @noinspection SqlNoDataSourceInspection */
@@ -31,7 +32,7 @@ class PdoQueryableTest extends TestCase
      */
     protected function getInstancePdoQueryable(): object
     {
-        return new class {
+        return new class () {
             use PdoQueryable {
                 setReqSql as TsetReqSql;
                 fetchAll as TfetchAll;

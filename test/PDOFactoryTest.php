@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection SqlResolve */
 /** @noinspection SqlNoDataSourceInspection */
 declare(strict_types=1);
@@ -16,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 class PDOFactoryTest extends TestCase
 {
-
     public function testSqlite(): void
     {
         $pdo = PDOFactory::sqlite();

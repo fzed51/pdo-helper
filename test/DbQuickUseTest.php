@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection UnknownInspectionInspection */
 /** @noinspection SyntaxError */
 /** @noinspection SqlResolve */
@@ -27,10 +28,8 @@ class DbQuickUseTest extends TestCase
         $this->pdo->exec("DELETE from test WHERE id >= 0");
         $this->pdo->exec("INSERT INTO test (nom) VALUES ('a')");
         $lstKey = $db->getLastPk('test', 'id');
-        self::assertIsInt($lstKey);
         $this->pdo->exec("INSERT INTO test (nom) VALUES ('b')");
         $lstKey2 = $db->getLastPk('test', 'id');
-        self::assertIsInt($lstKey2);
         self::assertGreaterThan($lstKey, $lstKey2);
     }
 
@@ -79,7 +78,6 @@ class DbQuickUseTest extends TestCase
         $this->pdo->exec("INSERT INTO test (nom) VALUES ('b')");
         $db = new DbQuickUse($this->pdo);
         $res = $db->selectOne(['nom'], 'test');
-        self::assertIsArray($res);
         self::assertCount(1, $res);
         self::assertArrayHasKey('nom', $res);
     }
@@ -110,9 +108,7 @@ class DbQuickUseTest extends TestCase
         $db = new DbQuickUse($this->pdo);
         $res = $db->select(['*'], 'test', ['nom' => null]);
 
-        self::assertIsArray($res);
         self::assertCount(1, $res);
-        self::assertIsArray($res[0]);
         self::assertArrayHasKey('id', $res[0]);
     }
 
