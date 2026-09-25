@@ -99,35 +99,6 @@ Sans clause WHERE, la condition `1 = 1` est utilisée.
 
 ---
 
-### SqlRequest
-
-Générateur de requêtes SELECT avec une interface fluide (chaînable).
-
-```php
-use Helper\SqlRequest;
-
-$sql = (new SqlRequest())
-    ->select(['id', 'email' => 'users.email', 'nom'])
-    ->from('users')
-    ->where(['actif = 1', 'age > 18'])
-    ->sql();
-// select id, users.email as email, nom from users where actif = 1 and age > 18
-
-// Ajout progressif
-$req = (new SqlRequest())
-    ->select('id')
-    ->addSelect('users.email', 'email')
-    ->from('users LEFT JOIN roles ON users.role_id = roles.id')
-    ->where('actif = 1')
-    ->addWhere('roles.name = "admin"');
-
-$sql = $req->sql();
-```
-
-`select()` et `from()` acceptent une chaîne ou un tableau. `where()` remplace les clauses existantes ; `addWhere()` en ajoute une.
-
----
-
 ### PdoQueryable
 
 Trait à inclure dans vos classes repository/DAO pour bénéficier d'un accès PDO avec cache de requêtes et gestion automatique de l'encodage.

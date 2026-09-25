@@ -1,6 +1,6 @@
 # Architecture
 
-Quatre classes indépendantes dans `src/` (namespace `Helper\`), aucune ne dépend d'une autre.
+Trois briques indépendantes dans `src/` (namespace `Helper\`), aucune ne dépend d'une autre.
 
 ## PDOFactory
 
@@ -17,10 +17,6 @@ CRUD rapide sur un `PDO` injecté : `select`, `selectOne`, `insertInto`, `update
 - `$fields` : clé string = alias (`['a' => 'col']` → `col as a`).
 - Noms de table/colonne interpolés **sans échappement** : jamais de donnée utilisateur à ces endroits.
 - `getLastPk()` fait un `max(pk)`, pas `lastInsertId()` ; lève `UnderflowException` si la table est vide.
-
-## SqlRequest
-
-Builder fluide de **SELECT uniquement** : `select`/`addSelect`, `from`, `where`/`addWhere`, `sql()`. `select()`/`addSelect()`/`addWhere()` cumulent ; `from()`/`where()` remplacent.
 
 ## PdoQueryable (trait)
 
