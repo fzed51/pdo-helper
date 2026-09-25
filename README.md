@@ -12,7 +12,7 @@ composer require fzed51/pdo-helper
 
 ### PDOFactory
 
-Fabrique statique pour créer des connexions PDO préconfigurées (mode exception activé, casse et mode de fetch configurables).
+Fabrique statique pour créer des connexions PDO préconfigurées (mode exception, lignes en objets, colonnes en minuscules ; tout est surchargeable).
 
 ```php
 use Helper\PDOFactory;
@@ -33,11 +33,14 @@ $pdo = PDOFactory::pgsql('ma_base', 'localhost', 'user', 'password');
 $pdo = PDOFactory::oci('MON_SID', 'user', 'password');
 ```
 
-**Configuration globale** (à définir avant la création des connexions) :
+**Attributs par défaut** : `ERRMODE_EXCEPTION`, `FETCH_OBJ`, `CASE_LOWER` (noms de colonnes en minuscules quel que soit le SGBD, y compris Oracle).
+Chaque constructeur accepte en dernier argument un tableau d'attributs PDO qui surcharge ces défauts :
 
 ```php
-PDOFactory::$case      = PDO::CASE_LOWER;   // défaut : PDO::CASE_UPPER
-PDOFactory::$fetchMode = PDO::FETCH_ASSOC;  // défaut : PDO::FETCH_OBJ
+$pdo = PDOFactory::sqlite(':memory:', [
+    PDO::ATTR_CASE               => PDO::CASE_NATURAL,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
 ```
 
 ---
@@ -96,35 +99,6 @@ $lastId = $db->getLastPk('users', 'id');
 | `['age > 18']` (clé entière) | clause brute verbatim |
 
 Sans clause WHERE, la condition `1 = 1` est utilisée.
-
----
-
-### SqlRequest
-
-Générateur de requêtes SELECT avec une interface fluide (chaînable).
-
-```php
-use Helper\SqlRequest;
-
-$sql = (new SqlRequest())
-    ->select(['id', 'email' => 'users.email', 'nom'])
-    ->from('users')
-    ->where(['actif = 1', 'age > 18'])
-    ->sql();
-// select id, users.email as email, nom from users where actif = 1 and age > 18
-
-// Ajout progressif
-$req = (new SqlRequest())
-    ->select('id')
-    ->addSelect('users.email', 'email')
-    ->from('users LEFT JOIN roles ON users.role_id = roles.id')
-    ->where('actif = 1')
-    ->addWhere('roles.name = "admin"');
-
-$sql = $req->sql();
-```
-
-`select()` et `from()` acceptent une chaîne ou un tableau. `where()` remplace les clauses existantes ; `addWhere()` en ajoute une.
 
 ---
 

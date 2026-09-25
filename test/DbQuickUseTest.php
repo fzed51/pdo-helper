@@ -153,7 +153,6 @@ class DbQuickUseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        PDOFactory::$case = PDO::CASE_LOWER;
         $pdo = PDOFactory::sqlite();
         $pdo->exec("CREATE TABLE test (id INTEGER PRIMARY KEY AUTOINCREMENT, nom text)");
         $this->pdo = $pdo;

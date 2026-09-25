@@ -31,61 +31,42 @@ class PDOFactoryTest extends TestCase
     }
 
 
-    public function testPropertyCase(): void
+    public function testDefaultAttributes(): void
     {
-        PDOFactory::$case = PDO::CASE_UPPER;
         $pdo = PDOFactory::sqlite();
-        $pdo->exec("CREATE TABLE test (nom text)");
-        $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $stm = $pdo->query("SELECT nom FROM test");
-        self::assertInstanceOf(PDOStatement::class, $stm);
-        $entity = $stm->fetch(PDO::FETCH_ASSOC);
-        self::assertNotFalse($entity);
-        $field = array_keys($entity)[0];
-        self::assertEquals('NOM', $field);
-        $pdo = null;
-
-        PDOFactory::$case = PDO::CASE_LOWER;
-        $pdo = PDOFactory::sqlite();
-        $pdo->exec("CREATE TABLE test (nom text)");
-        $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $stm = $pdo->query("SELECT nom FROM test");
-        self::assertInstanceOf(PDOStatement::class, $stm);
-        $entity = $stm->fetch(PDO::FETCH_ASSOC);
-        self::assertNotFalse($entity);
-        $field = array_keys($entity)[0];
-        self::assertEquals('nom', $field);
-        $pdo = null;
+        self::assertSame(PDO::ERRMODE_EXCEPTION, $pdo->getAttribute(PDO::ATTR_ERRMODE));
+        $entity = $this->fetchFirstRow($pdo);
+        self::assertEquals((object) ['nom' => 'a'], $entity);
     }
 
-    public function testPropertyFetchMode(): void
+    public function testOverrideCase(): void
     {
-        PDOFactory::$fetchMode = PDO::FETCH_ASSOC;
-        $pdo = PDOFactory::sqlite();
-        $pdo->exec("CREATE TABLE test (nom text)");
-        $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $stm = $pdo->query("SELECT nom FROM test");
+        $pdo = PDOFactory::sqlite(':memory:', [PDO::ATTR_CASE => PDO::CASE_UPPER]);
+        $entity = $this->fetchFirstRow($pdo);
+        self::assertEquals((object) ['NOM' => 'a'], $entity);
+    }
+
+    public function testOverrideFetchMode(): void
+    {
+        $pdo = PDOFactory::sqlite(':memory:', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
+        $entity = $this->fetchFirstRow($pdo);
+        self::assertSame(['nom' => 'a'], $entity);
+    }
+
+    /**
+     * Crée une table `test` avec une colonne `Nom` et retourne sa première ligne
+     * selon le fetch mode par défaut de la connexion
+     */
+    private function fetchFirstRow(PDO $pdo): mixed
+    {
+        $pdo->exec("CREATE TABLE test (Nom text)");
+        $pdo->exec("INSERT INTO test (Nom) VALUES ('a')");
+        $stm = $pdo->query("SELECT Nom FROM test");
         self::assertInstanceOf(PDOStatement::class, $stm);
         $entity = $stm->fetch();
         self::assertNotFalse($entity);
-        self::assertIsArray($entity);
-        $pdo = null;
-
-        PDOFactory::$fetchMode = PDO::FETCH_OBJ;
-        $pdo = PDOFactory::sqlite();
-        $pdo->exec("CREATE TABLE test (nom text)");
-        $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $stm = $pdo->query("SELECT nom FROM test");
-        self::assertInstanceOf(PDOStatement::class, $stm);
-        $entity = $stm->fetch();
-        self::assertNotFalse($entity);
-        self::assertIsObject($entity);
-        $pdo = null;
+        return $entity;
     }
-
-    // TODO : test pour la propriétée $case
-
-    // TODO : test pour la propriétée $fetchMode
 
     // TODO : test pour PgSql
     //   private function testPgsql(): void {}

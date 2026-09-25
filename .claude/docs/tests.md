@@ -2,7 +2,6 @@
 
 - Namespace `Test\`, fichiers `test/*Test.php`, un fichier par classe de `src/`.
 - Tout tourne sur SQLite `:memory:` : aucune base externe, seul `PDOFactoryTest` crée puis supprime un `./test.db` temporaire.
-- Les tests qui passent par `PDOFactory` fixent eux-mêmes `PDOFactory::$case` / `$fetchMode`, car ces statiques persistent d'un test à l'autre. Ex. `DbQuickUseTest::setUp()` force `CASE_LOWER`.
 
 ## Tester le trait PdoQueryable
 
