@@ -35,7 +35,7 @@ trait PdoQueryable
             return null;
         }
         $reqSql = str_replace(["\r", "\n"], ' ', $this->lastReqSql);
-        $reqSql = preg_replace('/\s+/', ' ', $reqSql);
+        $reqSql = preg_replace('/\s+/', ' ', $reqSql) ?? $reqSql;
         return [
             "request" => $reqSql,
             "params" => $this->lastReqParam
@@ -225,7 +225,14 @@ trait PdoQueryable
      */
     protected function getDbDriver(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if ($this->pdo === null) {
+            throw new RuntimeException("PDO n'est pas initialisé");
+        }
+        $driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if (!is_string($driver)) {
+            throw new RuntimeException('Impossible de déterminer le driver PDO');
+        }
+        return $driver;
     }
 
     /**
