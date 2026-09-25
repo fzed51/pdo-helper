@@ -23,3 +23,5 @@
 - CI GitHub Actions sur PHP 8.2, 8.3, 8.4 et 8.5.
 - PHP_CodeSniffer (PSR-2) remplacé par PHP-CS-Fixer (PSR-12).
 - phpstan 2, niveau 9.
+- PHPUnit 9 → 11.
+- `ext-mbstring` déclarée dans `require` (utilisée par `PdoQueryable`).
