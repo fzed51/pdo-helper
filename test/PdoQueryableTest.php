@@ -52,6 +52,21 @@ class PdoQueryableTest extends TestCase
         self::assertEquals(['id' => 1, 'data' => 'a'], $res);
     }
 
+    /** test de getLastReqInfo */
+    public function testGetLastReqInfo(): void
+    {
+        $o = $this->getInstancePdoQueryable();
+        self::assertNull($o->getLastReqInfo());
+        $o->setReqSql("select *
+  from test
+  where id = ?");
+        $o->fetchOne([2]);
+        self::assertSame(
+            ['request' => 'select * from test where id = ?', 'params' => [2]],
+            $o->getLastReqInfo()
+        );
+    }
+
     /** test de getDbDriver */
     public function testGetDbDriver(): void
     {
