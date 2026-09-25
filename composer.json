@@ -1,6 +1,6 @@
 {
   "name": "fzed51/pdo-helper",
-  "description": "Helper pour faciliter l'initialisation d'objet PDO",
+  "description": "Aide à l'utilisation de PDO : connexions préconfigurées, CRUD rapide et trait de requêtage",
   "type": "library",
   "require": {
     "php": ">=8.2 <8.6",

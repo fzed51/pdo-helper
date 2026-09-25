@@ -1,10 +1,13 @@
 # Changelog
 
-## 3.0.0 (non publiée)
+Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) ; le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
+
+## [3.0.0] - 2026-09-26
 
 ### Changements incompatibles
 
 - PHP **8.2 à 8.5** requis (`>=8.2 <8.6`).
+- Extension `mbstring` désormais requise (`ext-mbstring`, utilisée par `PdoQueryable`).
 - `SqlRequest` supprimé : utiliser `DbQuickUse` ou écrire le SQL directement.
 - `PDOFactory` :
   - statiques `PDOFactory::$case` et `PDOFactory::$fetchMode` supprimées ; passer les attributs PDO en dernier argument de `mysql()`, `sqlite()`, `oci()` ou `pgsql()` :
@@ -24,4 +27,14 @@
 - PHP_CodeSniffer (PSR-2) remplacé par PHP-CS-Fixer (PSR-12).
 - phpstan 2, niveau 9.
 - PHPUnit 9 → 11.
-- `ext-mbstring` déclarée dans `require` (utilisée par `PdoQueryable`).
+
+### Corrections
+
+- `PdoQueryable::getLastReqInfo()` retournait toujours `null` : la dernière requête exécutée n'était jamais mémorisée.
+- `DbQuickUse` fonctionne avec une connexion `PDOFactory` sans réglage préalable : l'ancien défaut `CASE_UPPER` rendait les clés `['nom']` introuvables.
+
+## Versions antérieures
+
+Voir les [tags du dépôt](https://github.com/fzed51/pdo-helper/tags) (jusqu'à `v2.1.0`).
+
+[3.0.0]: https://github.com/fzed51/pdo-helper/compare/v2.1.0...v3.0.0

@@ -23,5 +23,5 @@ Style : PHP-CS-Fixer, règles `@PSR12`, config `.php-cs-fixer.dist.php` (src/ et
 ## Compatibilité PHP 8.2 → 8.5
 
 - Contrainte `"php": ">=8.2 <8.6"` ; `config.platform.php = 8.2.0` : le `composer.lock` est résolu pour 8.2, donc installable sur toutes les versions supportées. Ne pas utiliser de syntaxe ou de fonction postérieure à 8.2.
-- CI : `.github/workflows/ci.yml` lance php-cs-fixer, phpstan et phpunit sur 8.2, 8.3, 8.4 et 8.5 (push sur `main`/`develop`, PR).
+- CI : `.github/workflows/ci.yml` lance php-cs-fixer, phpstan et phpunit sur 8.2, 8.3, 8.4 et 8.5 (push sur `main`, PR).
 - En local (PHP 8.5 + Xdebug), préfixer par `XDEBUG_MODE=off` pour accélérer les commandes.
