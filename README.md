@@ -12,7 +12,7 @@ composer require fzed51/pdo-helper
 
 ### PDOFactory
 
-Fabrique statique pour créer des connexions PDO préconfigurées (mode exception, tableaux associatifs, colonnes en minuscules ; tout est surchargeable).
+Fabrique statique pour créer des connexions PDO préconfigurées (mode exception, lignes en objets, colonnes en minuscules ; tout est surchargeable).
 
 ```php
 use Helper\PDOFactory;
@@ -33,13 +33,13 @@ $pdo = PDOFactory::pgsql('ma_base', 'localhost', 'user', 'password');
 $pdo = PDOFactory::oci('MON_SID', 'user', 'password');
 ```
 
-**Attributs par défaut** : `ERRMODE_EXCEPTION`, `FETCH_ASSOC`, `CASE_LOWER` (noms de colonnes en minuscules quel que soit le SGBD, y compris Oracle).
+**Attributs par défaut** : `ERRMODE_EXCEPTION`, `FETCH_OBJ`, `CASE_LOWER` (noms de colonnes en minuscules quel que soit le SGBD, y compris Oracle).
 Chaque constructeur accepte en dernier argument un tableau d'attributs PDO qui surcharge ces défauts :
 
 ```php
 $pdo = PDOFactory::sqlite(':memory:', [
     PDO::ATTR_CASE               => PDO::CASE_NATURAL,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
 ```
 

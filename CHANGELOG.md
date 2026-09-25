@@ -11,7 +11,7 @@
     ```php
     PDOFactory::sqlite(':memory:', [PDO::ATTR_CASE => PDO::CASE_UPPER]);
     ```
-  - nouveaux défauts : `PDO::CASE_LOWER` (au lieu de `CASE_UPPER`) et `PDO::FETCH_ASSOC` (au lieu de `FETCH_OBJ`).
+  - casse par défaut : `PDO::CASE_LOWER` (au lieu de `CASE_UPPER`) ; le fetch mode par défaut reste `PDO::FETCH_OBJ`.
   - paramètres de `mysql()` typés nativement.
 - `DbQuickUse` : une clause `$where` sans clé qui n'est pas une chaine lève `InvalidArgumentException`.
 - `PdoQueryable` :

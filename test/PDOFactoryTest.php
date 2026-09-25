@@ -36,22 +36,21 @@ class PDOFactoryTest extends TestCase
         $pdo = PDOFactory::sqlite();
         self::assertSame(PDO::ERRMODE_EXCEPTION, $pdo->getAttribute(PDO::ATTR_ERRMODE));
         $entity = $this->fetchFirstRow($pdo);
-        self::assertIsArray($entity);
-        self::assertSame(['nom' => 'a'], $entity);
+        self::assertEquals((object) ['nom' => 'a'], $entity);
     }
 
     public function testOverrideCase(): void
     {
         $pdo = PDOFactory::sqlite(':memory:', [PDO::ATTR_CASE => PDO::CASE_UPPER]);
         $entity = $this->fetchFirstRow($pdo);
-        self::assertSame(['NOM' => 'a'], $entity);
+        self::assertEquals((object) ['NOM' => 'a'], $entity);
     }
 
     public function testOverrideFetchMode(): void
     {
-        $pdo = PDOFactory::sqlite(':memory:', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ]);
+        $pdo = PDOFactory::sqlite(':memory:', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
         $entity = $this->fetchFirstRow($pdo);
-        self::assertIsObject($entity);
+        self::assertSame(['nom' => 'a'], $entity);
     }
 
     /**
