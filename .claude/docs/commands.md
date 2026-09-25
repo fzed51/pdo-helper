@@ -13,20 +13,15 @@ Config `phpunit.xml` : bootstrap `vendor/autoload.php`, suite = `test/*Test.php`
 ## Qualité
 
 ```bash
-composer check          # phpcs puis phpstan
-vendor/bin/phpcs        # PSR-2 sur src/ et test/
-vendor/bin/phpcbf       # correction auto du style
-vendor/bin/phpstan analyse   # niveau 6 sur src/ et test/
+composer check               # php-cs-fixer check puis phpstan
+composer fix                 # applique le style PSR-12 (php-cs-fixer fix)
+vendor/bin/phpstan analyse   # niveau défini dans phpstan.neon sur src/ et test/
 ```
 
-Dans `test/`, phpcs tolère les méthodes non camelCase et plusieurs classes par fichier.
+Style : PHP-CS-Fixer, règles `@PSR12`, config `.php-cs-fixer.dist.php` (src/ et test/).
 
-## Environnement local (PHP 8.5)
+## Compatibilité PHP 8.2 → 8.5
 
-Les dépendances verrouillées datent de 2023 : chaque commande affiche des dizaines de `Deprecated` et des traces Xdebug. Pour une sortie lisible :
-
-```bash
-php -d error_reporting="E_ALL & ~E_DEPRECATED" -d xdebug.mode=off vendor/bin/phpunit
-```
-
-phpstan 1.10.3 plante sous PHP 8.5 : son résultat est inexploitable tant que `composer.lock` n'est pas mis à jour. Ne pas conclure qu'il n'y a pas d'erreur de typage.
+- Contrainte `"php": ">=8.2 <8.6"` ; `config.platform.php = 8.2.0` : le `composer.lock` est résolu pour 8.2, donc installable sur toutes les versions supportées. Ne pas utiliser de syntaxe ou de fonction postérieure à 8.2.
+- CI : `.github/workflows/ci.yml` lance php-cs-fixer, phpstan et phpunit sur 8.2, 8.3, 8.4 et 8.5 (push sur `main`/`develop`, PR).
+- En local (PHP 8.5 + Xdebug), préfixer par `XDEBUG_MODE=off` pour accélérer les commandes.

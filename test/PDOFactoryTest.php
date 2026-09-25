@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection SqlResolve */
 /** @noinspection SqlNoDataSourceInspection */
 declare(strict_types=1);
@@ -12,11 +13,11 @@ namespace Test;
 
 use Helper\PDOFactory;
 use PDO;
+use PDOStatement;
 use PHPUnit\Framework\TestCase;
 
 class PDOFactoryTest extends TestCase
 {
-
     public function testSqlite(): void
     {
         $pdo = PDOFactory::sqlite();
@@ -36,7 +37,9 @@ class PDOFactoryTest extends TestCase
         $pdo = PDOFactory::sqlite();
         $pdo->exec("CREATE TABLE test (nom text)");
         $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $entity = $pdo->query("SELECT nom FROM test")->fetch(PDO::FETCH_ASSOC);
+        $stm = $pdo->query("SELECT nom FROM test");
+        self::assertInstanceOf(PDOStatement::class, $stm);
+        $entity = $stm->fetch(PDO::FETCH_ASSOC);
         self::assertNotFalse($entity);
         $field = array_keys($entity)[0];
         self::assertEquals('NOM', $field);
@@ -46,7 +49,9 @@ class PDOFactoryTest extends TestCase
         $pdo = PDOFactory::sqlite();
         $pdo->exec("CREATE TABLE test (nom text)");
         $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $entity = $pdo->query("SELECT nom FROM test")->fetch(PDO::FETCH_ASSOC);
+        $stm = $pdo->query("SELECT nom FROM test");
+        self::assertInstanceOf(PDOStatement::class, $stm);
+        $entity = $stm->fetch(PDO::FETCH_ASSOC);
         self::assertNotFalse($entity);
         $field = array_keys($entity)[0];
         self::assertEquals('nom', $field);
@@ -59,7 +64,9 @@ class PDOFactoryTest extends TestCase
         $pdo = PDOFactory::sqlite();
         $pdo->exec("CREATE TABLE test (nom text)");
         $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $entity = $pdo->query("SELECT nom FROM test")->fetch();
+        $stm = $pdo->query("SELECT nom FROM test");
+        self::assertInstanceOf(PDOStatement::class, $stm);
+        $entity = $stm->fetch();
         self::assertNotFalse($entity);
         self::assertIsArray($entity);
         $pdo = null;
@@ -68,7 +75,9 @@ class PDOFactoryTest extends TestCase
         $pdo = PDOFactory::sqlite();
         $pdo->exec("CREATE TABLE test (nom text)");
         $pdo->exec("INSERT INTO test (nom) VALUES ('a')");
-        $entity = $pdo->query("SELECT nom FROM test")->fetch();
+        $stm = $pdo->query("SELECT nom FROM test");
+        self::assertInstanceOf(PDOStatement::class, $stm);
+        $entity = $stm->fetch();
         self::assertNotFalse($entity);
         self::assertIsObject($entity);
         $pdo = null;

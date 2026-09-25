@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * User: Fabien Sanchez
@@ -8,6 +9,7 @@ declare(strict_types=1);
 
 namespace Helper;
 
+use InvalidArgumentException;
 use PDO;
 use PDOStatement;
 use RuntimeException;
@@ -57,6 +59,9 @@ class DbQuickUse
         $outWhere = [];
         foreach ($where as $k => $v) {
             if (is_int($k)) {
+                if (!is_string($v)) {
+                    throw new InvalidArgumentException('une clause where sans clé doit être une chaine SQL');
+                }
                 $outWhere[] = $v;
             } elseif (is_null($v)) {
                 $outWhere[] = $k . ' is null';
@@ -168,7 +173,7 @@ class DbQuickUse
 
     /**
      * lit 1 enregistrement
-     * @param mixed[] $fields
+     * @param array<int|string, string> $fields
      * @param string $table
      * @param mixed[] $where
      * @return null|array<string, mixed>
@@ -186,7 +191,7 @@ class DbQuickUse
 
     /**
      * genere un select
-     * @param mixed[] $select au format ['field', 'alias'=>'field']
+     * @param array<int|string, string> $select au format ['field', 'alias'=>'field']
      * @return string
      */
     protected function genSelect(array $select): string
@@ -204,7 +209,7 @@ class DbQuickUse
 
     /**
      * lit plusieurs enregistrements
-     * @param mixed[] $fields
+     * @param array<int|string, string> $fields
      * @param string $table
      * @param mixed[] $where
      * @param int $limit

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Helper;
@@ -34,7 +35,7 @@ trait PdoQueryable
             return null;
         }
         $reqSql = str_replace(["\r", "\n"], ' ', $this->lastReqSql);
-        $reqSql = preg_replace('/\s+/', ' ', $reqSql);
+        $reqSql = preg_replace('/\s+/', ' ', $reqSql) ?? $reqSql;
         return [
             "request" => $reqSql,
             "params" => $this->lastReqParam
@@ -173,10 +174,14 @@ trait PdoQueryable
         $supportedCharset[] = 'ISO-8859-1';
         $supportedCharset[] = 'ASCII';
         $charset = mb_detect_encoding($value, $supportedCharset, true);
-        if ($newCharset !== $charset) {
-            return mb_convert_encoding($value, $newCharset, $charset);
+        if ($charset === false || $charset === $newCharset) {
+            return $value;
         }
-        return $value;
+        $converted = mb_convert_encoding($value, $newCharset, $charset);
+        if ($converted === false) {
+            throw new RuntimeException("Impossible de convertir la chaine de $charset vers $newCharset");
+        }
+        return $converted;
     }
 
     /**
@@ -220,12 +225,19 @@ trait PdoQueryable
      */
     protected function getDbDriver(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if ($this->pdo === null) {
+            throw new RuntimeException("PDO n'est pas initialisé");
+        }
+        $driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if (!is_string($driver)) {
+            throw new RuntimeException('Impossible de déterminer le driver PDO');
+        }
+        return $driver;
     }
 
     /**
      * Retourne le nombre de lignes affecté par la dernière exécution.
-     * @return int;
+     * @return int
      */
     protected function getRowsAffected(): int
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * User: Fabien Sanchez
@@ -8,8 +9,6 @@ declare(strict_types=1);
 
 namespace Helper;
 
-use InvalidArgumentException;
-
 /**
  * Class SqlRequest
  * générateur de requete sql avec une ecriture sous forme objet
@@ -17,7 +16,6 @@ use InvalidArgumentException;
  */
 class SqlRequest
 {
-
     /**
      * liste des champs du select
      * @var string[]
@@ -49,13 +47,10 @@ class SqlRequest
      * @param string|string[] $select
      * @return SqlRequest
      */
-    public function select($select): SqlRequest
+    public function select(string|array $select): SqlRequest
     {
         if (is_string($select)) {
             $select = [$select];
-        }
-        if (!is_array($select)) {
-            throw new InvalidArgumentException('type string/array attendu');
         }
         foreach ($select as $name => $fullname) {
             if (is_int($name)) {
@@ -100,13 +95,10 @@ class SqlRequest
      * @param string|string[] $from
      * @return SqlRequest
      */
-    public function from($from): SqlRequest
+    public function from(string|array $from): SqlRequest
     {
         if (is_string($from)) {
             $from = [$from];
-        }
-        if (!is_array($from)) {
-            throw new InvalidArgumentException('type string/array attendu');
         }
         $this->from = $from;
         return $this;
@@ -116,13 +108,10 @@ class SqlRequest
      * @param string|string[] $where
      * @return SqlRequest
      */
-    public function where($where): SqlRequest
+    public function where(string|array $where): SqlRequest
     {
         if (is_string($where)) {
             $where = ["($where)"];
-        }
-        if (!is_array($where)) {
-            throw new InvalidArgumentException('type string/array attendu');
         }
         $this->where = $where;
         return $this;

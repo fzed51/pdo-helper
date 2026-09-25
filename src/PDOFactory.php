@@ -10,7 +10,6 @@ use PDO;
  */
 class PDOFactory
 {
-
     /**
      * case du nom des champs (\PDO::CASE_UPPER | \PDO::CASE_LOWER)
      * @var int
