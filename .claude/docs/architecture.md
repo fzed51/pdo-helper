@@ -13,7 +13,7 @@ Constructeurs statiques de `PDO` : `mysql()`, `sqlite()` (défaut `:memory:`, l�
 
 CRUD rapide sur un `PDO` injecté : `select`, `selectOne`, `insertInto`, `update`, `delete`, `countElement`, `getLastPk`.
 
-- `$where` : clé string → `col = ?` (valeur null → `col is null`) ; clé int → la valeur est un fragment SQL brut. Vide → `1 = 1`.
+- `$where` : clé string → `col = ?` (valeur null → `col is null`) ; clé int → la valeur est un fragment SQL brut (string obligatoire, sinon `InvalidArgumentException`). Vide → `1 = 1`.
 - `$fields` : clé string = alias (`['a' => 'col']` → `col as a`).
 - Noms de table/colonne interpolés **sans échappement** : jamais de donnée utilisateur à ces endroits.
 - `getLastPk()` fait un `max(pk)`, pas `lastInsertId()` ; lève `UnderflowException` si la table est vide.
