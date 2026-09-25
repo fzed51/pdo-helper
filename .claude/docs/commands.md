@@ -15,7 +15,7 @@ Config `phpunit.xml` : bootstrap `vendor/autoload.php`, suite = `test/*Test.php`
 ```bash
 composer check               # php-cs-fixer check puis phpstan
 composer fix                 # applique le style PSR-12 (php-cs-fixer fix)
-vendor/bin/phpstan analyse   # niveau 6 sur src/ et test/
+vendor/bin/phpstan analyse   # niveau défini dans phpstan.neon sur src/ et test/
 ```
 
 Style : PHP-CS-Fixer, règles `@PSR12`, config `.php-cs-fixer.dist.php` (src/ et test/).

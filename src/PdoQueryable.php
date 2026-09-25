@@ -174,10 +174,14 @@ trait PdoQueryable
         $supportedCharset[] = 'ISO-8859-1';
         $supportedCharset[] = 'ASCII';
         $charset = mb_detect_encoding($value, $supportedCharset, true);
-        if ($newCharset !== $charset) {
-            return mb_convert_encoding($value, $newCharset, $charset);
+        if ($charset === false || $charset === $newCharset) {
+            return $value;
         }
-        return $value;
+        $converted = mb_convert_encoding($value, $newCharset, $charset);
+        if ($converted === false) {
+            throw new RuntimeException("Impossible de convertir la chaine de $charset vers $newCharset");
+        }
+        return $converted;
     }
 
     /**

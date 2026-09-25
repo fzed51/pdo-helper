@@ -6,18 +6,4 @@
 
 ## Tester le trait PdoQueryable
 
-Ses méthodes sont `protected` : les tests utilisent une classe anonyme qui `use` le trait avec des alias et ré-expose des méthodes publiques. Le constructeur y crée la base SQLite et assigne `$this->pdo` directement.
-
-```php
-return new class {
-    use PdoQueryable {
-        fetchAll as TfetchAll;
-    }
-    public function fetchAll(array $param = []): array
-    {
-        return $this->TfetchAll($param);
-    }
-};
-```
-
-Modèle complet : `getInstancePdoQueryable()` dans `test/PdoQueryableTest.php` ; y ajouter l'alias de toute nouvelle méthode testée.
+Ses méthodes sont `protected` : `test/Stub/PdoQueryableStub.php` (`Test\Stub\PdoQueryableStub`) `use` le trait avec des alias (`fetchAll as TfetchAll`) et ré-expose des méthodes publiques typées. Son constructeur crée la base SQLite `test` (2 lignes). Pour tester une nouvelle méthode du trait, y ajouter l'alias et la méthode publique correspondante.

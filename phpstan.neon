@@ -1,7 +1,7 @@
 parameters:
     # editorUrl: 'vscode://file/%%file%%:%%line%%'
     # editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
-    level: 6
+    level: 7
     paths:
         - src
         - test
