@@ -15,7 +15,7 @@ jobs:
         php: ['8.2', '8.3', '8.4', '8.5']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -23,7 +23,7 @@ jobs:
           extensions: pdo, pdo_sqlite, mbstring
           coverage: none
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v4
 
       - name: Code style
         run: vendor/bin/php-cs-fixer check --diff
